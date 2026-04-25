@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Pair Aura｜关系气场报告</title>
+  <meta name="description" content="输入两个人的 MBTI / SBTI，生成关系气场、合拍指数、差异分析和可分享海报。" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-orb orb-a"></div>
+  <div class="bg-orb orb-b"></div>
+  <div class="bg-orb orb-c"></div>
+
+  <main class="app-shell">
+    <section class="hero card glass" id="home">
+      <div class="topline">PAIR AURA · RELATIONSHIP WRAPPED</div>
+      <h1>不是看你是谁，<br>是看你们在一起会发生什么。</h1>
+      <p class="subtitle">输入两个人的 16 型人格 / SBTI 标签，生成一份可截图、可转发、可邀请 TA 补全的关系气场报告。</p>
+      <div class="aura-stage" aria-hidden="true">
+        <div class="aura-ball a">A</div>
+        <div class="aura-link"></div>
+        <div class="aura-ball b">B</div>
+      </div>
+      <div class="hero-actions">
+        <button class="primary" id="startBtn">开始合成关系</button>
+        <button class="secondary" id="inviteFirstBtn">我先填 A，再邀请 TA</button>
+      </div>
+      <div class="mini-tags">
+        <span>高吸引高摩擦型</span><span>灵魂同频型</span><span>互补成长型</span><span>嘴硬但离不开型</span>
+      </div>
+    </section>
+
+    <section class="panel card glass hidden" id="formPanel">
+      <div class="stepper">
+        <span class="step-dot active" data-step="1">1 输入类型</span>
+        <span class="step-dot" data-step="2">2 去测/核对</span>
+        <span class="step-dot" data-step="3">3 关系组</span>
+        <span class="step-dot" data-step="4">4 报告语气</span>
+      </div>
+
+      <div class="invite-banner hidden" id="inviteBanner"></div>
+
+      <form id="pairForm">
+        <section class="form-step" data-step="1">
+          <h2>先输入两个人的类型</h2>
+          <p class="hint">至少填 MBTI 或 SBTI 其中一个。A 可以先填完再生成邀请链接，让 B 自己补全。</p>
+          <div class="person-grid">
+            <article class="person-card">
+              <div class="person-title"><span>A 的人格碎片</span><small id="aLockTag"></small></div>
+              <label>昵称<input id="nameA" placeholder="我 / A / 小王" maxlength="12" /></label>
+              <label>MBTI / 16型人格
+                <select id="mbtiA"></select>
+              </label>
+              <label>SBTI 标签
+                <select id="sbtiA"></select>
+              </label>
+              <details class="advanced">
+                <summary>可选：细分倾向</summary>
+                <label>回复消息习惯
+                  <select id="replyA"><option value="0">不确定</option><option value="1">看到就想回</option><option value="-1">有空再集中回</option></select>
+                </label>
+                <label>冲突处理
+                  <select id="conflictA"><option value="0">不确定</option><option value="1">马上说清楚</option><option value="-1">先冷静一下</option></select>
+                </label>
+                <label>情绪需求
+                  <select id="comfortA"><option value="0">不确定</option><option value="1">先安慰我</option><option value="-1">帮我分析问题</option></select>
+                </label>
+              </details>
+            </article>
+
+            <article class="person-card" id="personBCard">
+              <div class="person-title"><span>B 的人格碎片</span><small id="bLockTag"></small></div>
+              <label>昵称<input id="nameB" placeholder="TA / B / 小李" maxlength="12" /></label>
+              <label>MBTI / 16型人格
+                <select id="mbtiB"></select>
+              </label>
+              <label>SBTI 标签
+                <select id="sbtiB"></select>
+              </label>
+              <details class="advanced">
+                <summary>可选：细分倾向</summary>
+                <label>回复消息习惯
+                  <select id="replyB"><option value="0">不确定</option><option value="1">看到就想回</option><option value="-1">有空再集中回</option></select>
+                </label>
+                <label>冲突处理
+                  <select id="conflictB"><option value="0">不确定</option><option value="1">马上说清楚</option><option value="-1">先冷静一下</option></select>
+                </label>
+                <label>情绪需求
+                  <select id="comfortB"><option value="0">不确定</option><option value="1">先安慰我</option><option value="-1">帮我分析问题</option></select>
+                </label>
+              </details>
+            </article>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="secondary" id="makeInviteBtn">只填 A，生成邀请 B 链接</button>
+            <button type="button" class="primary next" data-next="2">下一步</button>
+          </div>
+        </section>
+
+        <section class="form-step hidden" data-step="2">
+          <h2>先去测 / 核对结果</h2>
+          <p class="hint">这里修正为你指定的官方入口。用户可以先去测，回来后继续填写，不会打断当前页面。</p>
+          <div class="link-grid">
+            <a class="test-link" href="https://www.16personalities.com/free-personality-test" target="_blank" rel="noopener">去测 MBTI / 16Personalities <span>官方测试入口</span></a>
+            <a class="test-link" href="https://fancc.de5.net/projects/sbti/" target="_blank" rel="noopener">去测 SBTI <span>你指定的 SBTI 入口</span></a>
+          </div>
+          <div class="check-card">
+            <b>核对提示</b>
+            <p>MBTI 建议填写四字母类型；SBTI 建议填写结果页的主标签。后续版本可加入截图识别和维度百分比。</p>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="secondary prev" data-prev="1">返回修改</button>
+            <button type="button" class="primary next" data-next="3">已核对，下一步</button>
+          </div>
+        </section>
+
+        <section class="form-step hidden" data-step="3">
+          <h2>选择关系组</h2>
+          <p class="hint">同样两个人，在情侣、朋友、室友、项目搭档中的权重会不同。</p>
+          <div class="choice-grid" id="contextChoices"></div>
+          <div class="form-actions">
+            <button type="button" class="secondary prev" data-prev="2">上一步</button>
+            <button type="button" class="primary next" data-next="4">下一步</button>
+          </div>
+        </section>
+
+        <section class="form-step hidden" data-step="4">
+          <h2>选择报告语气</h2>
+          <p class="hint">同一组数据会按语气换不同表达方式，方便截图传播。</p>
+          <div class="choice-grid" id="toneChoices"></div>
+          <div class="form-actions">
+            <button type="button" class="secondary prev" data-prev="3">上一步</button>
+            <button type="submit" class="primary">生成我们的关系气场</button>
+          </div>
+        </section>
+      </form>
+    </section>
+
+    <section class="result hidden" id="resultPanel">
+      <article class="report-hero card glass" id="reportTop">
+        <div class="topline" id="reportMode">PAIR AURA REPORT</div>
+        <h2 id="relationshipTitle"></h2>
+        <div class="score-wrap"><span id="totalScore">--</span><small>合拍指数</small></div>
+        <div class="mini-tags" id="keywordTags"></div>
+        <p class="summary" id="summaryText"></p>
+        <div class="disclaimer">仅供娱乐、社交和自我理解，不构成心理诊断或关系判决。</div>
+      </article>
+
+      <article class="card glass">
+        <h3>关系数据面板</h3>
+        <div class="metric-list" id="metrics"></div>
+      </article>
+
+      <article class="card glass">
+        <h3>你们的最大差异</h3>
+        <div class="diff-list" id="diffList"></div>
+      </article>
+
+      <div class="cards-grid" id="storyCards"></div>
+
+      <article class="card glass share-card">
+        <h3>邀请 / 分享</h3>
+        <p id="shareSentence"></p>
+        <div class="share-actions">
+          <button class="primary" id="copyReportLink">复制报告链接</button>
+          <button class="secondary" id="downloadPoster">下载分享海报</button>
+          <button class="secondary" id="restartBtn">重新生成</button>
+        </div>
+        <canvas id="poster" width="1080" height="1440"></canvas>
+      </article>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
